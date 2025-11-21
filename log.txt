@@ -1,2 +1,4 @@
+d519416 (HEAD -> main) refactoring name stuff
+dd8d48b (origin/main, origin/HEAD) Task 1.2
 7b640eb Task 1.1
 73ab356 Initial commit
