@@ -1,5 +1,7 @@
-77a7219 (HEAD -> main) all done finally?
-bf060b1 (origin/main, origin/HEAD) Task 2.3
+d5b292e (HEAD -> main, origin/main, origin/HEAD) Task 2.2
+7392768 Task 2.4
+77a7219 all done finally?
+bf060b1 Task 2.3
 ffd9990 usd stuff
 aaf359f Task 2.1
 d519416 refactoring name stuff
