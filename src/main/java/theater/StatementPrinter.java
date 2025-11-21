@@ -30,13 +30,38 @@ public class StatementPrinter {
      * @throws RuntimeException if one of the play types is not known
      */
     public String statement() {
+        final StringBuilder result = getTotalResult();
+
+        result.append(String.format("Amount owed is %s%n", usd(getTotalAmount())));
+        result.append(String.format("You earned %s credits%n", getTotalVolumeCredits()));
+        return result.toString();
+    }
+
+    private int getTotalAmount() {
         int totalAmount = 0;
-        int volumeCredits = 0;
+        for (Performance performance : invoice.getPerformances()) {
+            totalAmount += getAmount(performance);
+        }
+        return totalAmount;
+    }
+
+    private StringBuilder getTotalResult() {
         final StringBuilder result = new StringBuilder("Statement for " + invoice.getCustomer()
                 + System.lineSeparator());
 
         for (Performance performance : invoice.getPerformances()) {
             final Play play = getPlay(performance);
+            // print line for this order
+            result.append(String.format("  %s: %s (%s seats)%n", play.getName(),
+                    usd(getAmount(performance)), performance.getAudience()));
+
+        }
+        return result;
+    }
+
+    private int getTotalVolumeCredits() {
+        int volumeCredits = 0;
+        for (Performance performance : invoice.getPerformances()) {
 
             // add volume credits
             volumeCredits += Math.max(performance.getAudience() - Constants.BASE_VOLUME_CREDIT_THRESHOLD, 0);
@@ -44,15 +69,8 @@ public class StatementPrinter {
             if ("comedy".equals(getPlay(performance).getType())) {
                 volumeCredits += performance.getAudience() / Constants.COMEDY_EXTRA_VOLUME_FACTOR;
             }
-
-            // print line for this order
-            result.append(String.format("  %s: %s (%s seats)%n", play.getName(),
-                    usd(getAmount(performance)), performance.getAudience()));
-            totalAmount += getAmount(performance);
         }
-        result.append(String.format("Amount owed is %s%n", usd(totalAmount)));
-        result.append(String.format("You earned %s credits%n", volumeCredits));
-        return result.toString();
+        return volumeCredits;
     }
 
     private static String usd(int totalAmount) {
